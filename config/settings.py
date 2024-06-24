@@ -40,7 +40,7 @@ BASIS_APPS = [
 ]
 
 THRIDPATY_APPS = [
-    'users',
+    'users', 'lists',
 ]
 
 INSTALLED_APPS = BASIS_APPS + THRIDPATY_APPS
