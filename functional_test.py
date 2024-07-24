@@ -27,7 +27,7 @@ class NewVisitorTest(unittest.TestCase):
         # 엔터키를 치면 페이지가 갱신되고 작업 목록에
         # "1. 공작깃털 사기" 아이템이 추가된다
         inputbox = self.browser.find_element(By.ID, "id_new_item")
-        inputbox.send_keys("1: 공작깃털 사기")
+        inputbox.send_keys("공작깃털 사기")
         inputbox.send_keys(Keys.ENTER)
         self.check_for_row_in_list_table("1: 공작깃털 사기")
 
@@ -39,7 +39,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         self.check_for_row_in_list_table("2: 공작깃털을 이용해서 그물 만들기")
-        self.check_for_row_in_list_table("1. 공작깃털 사기")
+        self.check_for_row_in_list_table("1: 공작깃털 사기")
         self.fail("Finish the test!")
 
 
