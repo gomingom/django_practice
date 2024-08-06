@@ -1,10 +1,10 @@
-import unittest
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self) -> None:
         self.browser = webdriver.Chrome()
@@ -19,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get("http://localhost:8000/lists")
+        self.browser.get(self.live_server_url)
 
         self.assertIn("To-Do", self.browser.title)
         header_text = self.browser.find_element(By.TAG_NAME, "h1").text
@@ -41,13 +41,3 @@ class NewVisitorTest(unittest.TestCase):
         self.check_for_row_in_list_table("2: 공작깃털을 이용해서 그물 만들기")
         self.check_for_row_in_list_table("1: 공작깃털 사기")
         self.fail("Finish the test!")
-
-
-if __name__ == "__main__":
-    unittest.main(warnings="ignore")
-
-
-browser = webdriver.Chrome()
-browser.get("http://127.0.0.1:8000")
-
-assert "Congratulations" in browser.title
