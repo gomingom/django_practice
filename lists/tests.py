@@ -19,7 +19,7 @@ from unittest import mock
 class HomePageTest(TestCase):
 
     def test_root_url_resolves_to_home_page_view(self):
-        found = resolve("/lists/")  # ReserverMatch object
+        found = resolve("/")  # ReserverMatch object
         self.assertEqual(found.func, home_page)
         # 동일한 뷰 함수 확인, url로 입력한 뷰와 view 함수에 정의된 뷰가 동일한지 확인
         # 동일한 함수인지는 어떻게 확인하는 거지? --> 메모리 주소로 함수가 같은지 확인하는 거임.
@@ -71,17 +71,7 @@ class HomePageTest(TestCase):
         response = home_page(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/")
-
-    def test_home_page_displays_all_list_itmes(self):
-        Item.objects.create(text="itemey 1")
-        Item.objects.create(text="itemey 2")
-
-        request = HttpRequest()
-        response = home_page(request)
-
-        self.assertIn("itemey 1", response.content.decode())
-        self.assertIn("itemey 2", response.content.decode())
+        self.assertEqual(response["location"], "/lists/the-only-list-in-the-world/")
 
 
 class ItemModelTest(TestCase):
@@ -101,3 +91,19 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, "첫 번째 아이템")
         self.assertEqual(second_saved_item.text, "두 번째 아이템")
+
+
+class ListViewTest(TestCase):
+
+    def test_displays_all_itmes(self):
+        Item.objects.create(text="itemey 1")
+        Item.objects.create(text="itemey 2")
+
+        response = self.client.get("/lists/the-only-list-in-the-world/")
+
+        self.assertContains(response, "itemey 1")
+        self.assertContains(response, "itemey 2")
+
+    def test_uses_list_template(self):
+        response = self.client.get("/lists/the-only-list-in-the-world/")
+        self.assertTemplateUsed(response, "list.html")
